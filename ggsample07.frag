@@ -32,9 +32,15 @@ void main(void)
   float rd = dot(nn, nl);
   float rs = dot(nr, nv);
 
+  //cosθを求める
+  float cos_theta = sqrt(1 - dot(l, t) * dot(l, t));
+
+  //cosαを求める
+  float cos_alpha = max(cos_theta * sqrt(1 - dot(v, t) * dot(v, t)) - dot(l, t) * dot(v, t), 0);
+
   vec4 iamb = kamb * lamb;
-  vec4 idiff = max(rd, 0.0) * kdiff * ldiff;
-  vec4 ispec = pow(max(rs, 0.0), kshi) * kspec * lspec;
+  vec4 idiff = max(cos_theta, 0.0) * kdiff * ldiff;
+  vec4 ispec = pow(cos_alpha, kshi) * kspec * lspec;
 
   fc = iamb + idiff + ispec;
 }
